@@ -8,14 +8,21 @@
  */
 
 #include <iostream>
+#include <vector>
 
 class Sudoku
 {
     public:
         /**
-         * @brief Construct a new Sudoku object with empty data
+         * @brief Construct a new Sudoku object with empty data. Size is 9x9
          */
         Sudoku();
+        /**
+         * @brief Construct a new Sudoku object with given size
+         * 
+         * @param size Size of the board. Eg. 4x4, 9x9 etc.
+         */
+        Sudoku(uint8_t size);
         /**
          * @brief Construct a new Sudoku object with data
          * 
@@ -25,7 +32,7 @@ class Sudoku
         /**
          * @brief Destroy the Sudoku object
          */
-        ~Sudoku();
+        //~Sudoku();
 
         /**
          * @brief Prints formatted Sudoku board
@@ -37,16 +44,7 @@ class Sudoku
          */
         void print_raw() const;
 
-        /**
-         * @brief Set the field to given value
-         * 
-         * @param row Row coordinate of the field
-         * @param col Column coordinate of the field
-         * @param val Value to set the field (1 - 9)
-         * @return uint32_t Return code
-         */
-        uint32_t update_field(uint8_t row, uint8_t col, uint8_t val);
-
+       
         /**
          * @brief Updates the board according to configuration string. Unacceptable changes will result in error
          * 
@@ -56,12 +54,18 @@ class Sudoku
         uint32_t update_board(std::string config);
 
         /**
-         * @brief Get the value at field
+         * @brief Overload the array subscript operator for rows
          * 
-         * @param row Row coordinate of field
-         * @param col Column coordinate of field
-         * @return uint8_t value at field
+         * @param row Row of an array
+         * @return uint8_t* Pointer to returned row
          */
-        uint8_t get_field(uint8_t row, uint8_t col) const;
+        std::vector<uint8_t> operator[](std::size_t row);
+        const std::vector<uint8_t> operator[](std::size_t row) const;
 
+    private:
+        uint8_t m_columns;
+        uint8_t m_rows;
+        std::vector<uint8_t> m_board;
+        uint32_t parse_string(std::string str);
 };
+
