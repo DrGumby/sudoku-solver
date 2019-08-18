@@ -7,6 +7,7 @@
  * 
  */
 
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -42,7 +43,7 @@ class Sudoku
         /**
          * @brief Prints Sudoku board as string in the same format as the constructor accepts. See README.md for format
          */
-        void print_raw() const;
+        std::string get_raw() const;
 
        
         /**
@@ -54,13 +55,36 @@ class Sudoku
         uint32_t update_board(std::string config);
 
         /**
-         * @brief Overload the array subscript operator for rows
+         * @brief Get the columns object
          * 
-         * @param row Row of an array
-         * @return uint8_t* Pointer to returned row
+         * @return  uint8_t 
          */
-        std::vector<uint8_t> operator[](std::size_t row);
-        const std::vector<uint8_t> operator[](std::size_t row) const;
+        uint8_t get_columns() const {return m_columns;};
+
+        /**
+         * @brief Get the rows object
+         * 
+         * @return  uint8_t 
+         */
+        uint8_t get_rows() const {return m_rows;};
+
+        /**
+         * @brief Set the value object
+         * 
+         * @param row Row to be inserted
+         * @param col Column to be inserted
+         * @param val Value to be inserted
+         */
+        void set_value(uint8_t row, uint8_t col, uint8_t val);
+
+        /**
+         * @brief Get the value object
+         * 
+         * @param row Row of searched field
+         * @param col Column of searched field
+         * @return uint8_t Value of field
+         */
+        uint8_t get_value(uint8_t row, uint8_t col) const;
 
     private:
         uint8_t m_columns;

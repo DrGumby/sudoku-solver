@@ -36,7 +36,9 @@ uint32_t Sudoku::parse_string(std::string str) {
     
     // Find the width of board
     row_length = get_row_length(str);
-
+    if (row_length != 6 && row_length != 9) {
+        throw "Unsuppoerted";
+    }
     // Set both variables because the board bust be a square
     m_columns = row_length;
     m_rows    = row_length;
@@ -53,15 +55,15 @@ uint32_t Sudoku::parse_string(std::string str) {
             col = 0;
         }
         // Check the char is bethween 1 and size
-        if (i >= '1' && i <= row_length+'0') {
+        if (i >= '1' && i <= static_cast<int64_t>(row_length)+'0') {
             m_board.at(row * row_length + col) = i - '0';
             col++;
         }
         
         // Finally, check for empty fields
         if (i == '_') {
-            col++;
             m_board.at(row * row_length + col) = 0;
+            col++;
         }
     }
 
@@ -78,7 +80,7 @@ Sudoku::Sudoku(std::string init_config) : m_board(get_row_length(init_config)*ge
     parse_string(init_config);
 }
 
-void Sudoku::print_raw() const {
+std::string Sudoku::get_raw() const {
     // Initialize empty string
     std::string str{};
 
@@ -97,7 +99,7 @@ void Sudoku::print_raw() const {
             str += m_board.at(i)+'0';
         }
     }
-    std::cout << str << std::endl;
+    return str;
 }
 
 // Prints horizontal border based on the specified number of fields for numbers
@@ -125,8 +127,6 @@ void Sudoku::print_format() const {
     +---+---+---+---+
     ...
     */
-    std::size_t row = 0;
-    std::size_t col = 0;
     std::string border = get_border_horizontal(m_rows);
 
     for (uint32_t i = 0; i < m_board.size(); i++) {
@@ -142,13 +142,12 @@ void Sudoku::print_format() const {
     std::cout << border << std::endl;
 }
 
-std::vector<uint8_t> Sudoku::operator[](std::size_t row) {
-    std::vector<uint8_t> sub(&m_board.at(row*m_columns), &m_board.at(row*m_columns+m_columns));
-    return sub;
+void Sudoku::set_value(uint8_t row, uint8_t col, uint8_t val) {
+    m_board.at(row*m_columns+col) = val;
 }
-const std::vector<uint8_t> Sudoku::operator[](std::size_t row) const {
-    std::vector<uint8_t> sub(&m_board.at(row*m_columns), &m_board.at(row*m_columns+m_columns));
-    return sub;
+
+uint8_t Sudoku::get_value(uint8_t row, uint8_t col) const {
+    return m_board.at(row*m_columns+col);
 }
 
 uint32_t Sudoku::update_board(std::string config) {
@@ -160,4 +159,5 @@ uint32_t Sudoku::update_board(std::string config) {
     }
 
     parse_string(config);
+    return 0;
 }
